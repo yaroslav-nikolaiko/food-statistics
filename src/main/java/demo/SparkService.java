@@ -40,6 +40,22 @@ public class SparkService implements Serializable{
                         LinkedHashMap::new));
     }
 
+    public Map<String, Integer> mostCommentedFoodItems(int number) {
+        return reviews
+                .mapToPair(r -> new Tuple2<>(r.itemID, 1))
+                .reduceByKey((v1, v2) -> v1 + v2)
+                .mapToPair(t -> new Tuple2<>(t._2, t._1))
+                .sortByKey(false)
+                .take(number)
+                .stream()
+                .collect(toMap(Tuple2::_2, Tuple2::_1,(u, v) -> {
+                            throw new IllegalStateException(String.format("Duplicate key %s", u));
+                        },
+                        LinkedHashMap::new));
+    }
+
+
+
     public void setParser(Parser parser) {
         this.parser = parser;
     }
