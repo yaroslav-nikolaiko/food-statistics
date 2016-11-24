@@ -1,4 +1,4 @@
-package demo;
+package demo.translator;
 
 import demo.model.Review;
 import org.springframework.beans.factory.annotation.Autowired;

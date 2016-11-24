@@ -13,7 +13,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 @RequestMapping(path = "${google.translator.endpoint}")
 public class GoogleTranslateMock {
-    @Value("${google.translator.response.time.ms}") Integer responseTime;
+    @Value("${google.translator.response.time.ms}")
+    Integer responseTime;
 
     @RequestMapping(method = POST)
     public TranslatorResponse translate(@RequestBody TranslatorPayload payload){

@@ -1,21 +1,31 @@
-package demo;
+package demo.translator;
 
+import demo.FoodReviewsApplication;
+import demo.SparkService;
+import demo.SparkServiceTest;
 import demo.mock.GoogleTranslateMock;
 import demo.model.Review;
 import demo.model.TranslatorPayload;
+import demo.model.TranslatorResponse;
 import demo.parser.CSVParser;
+import demo.translator.Translator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import static org.junit.Assert.*;
 
@@ -53,14 +63,26 @@ public class TranslatorTest {
         );
     }
 
-/*    @Autowired
+    @Autowired
     TranslatorClient translatorClient;
 
     @Test
-    public void test(){
-        TranslatorResponse translate = translatorClient.translate(new TranslatorPayload("en", "ru", "dsfsdfsdf sdfsdf"));
-        System.out.println(translate);
-    }*/
+    public void test() throws Exception {
+        System.out.println("Before Request ");
+        ListenableFuture<ResponseEntity<TranslatorResponse>> translate = translatorClient.translate(new TranslatorPayload("en", "ru", "dsfsdfsdf sdfsdf"));
+        /*while(true){
+            System.out.println(translate.hasResult());
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }*/
+        System.out.println("After Request ");
+        System.out.println(translate.get().getBody().getText());
+        System.out.println("After REsponse ");
+        //System.out.println(translate);
+    }
 
     Set<String> expectedTranslation(){
         Set<String> result = new HashSet<>();
