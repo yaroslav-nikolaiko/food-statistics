@@ -1,11 +1,16 @@
 package demo;
 
+import demo.model.Review;
+import demo.parser.CSVParser;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.apache.avro.TypeEnum.c;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -51,8 +56,18 @@ public class SparkServiceTest {
         Map<String, Integer> words = sparkService.mostUsedWordsInReview(3);
 
         assertEquals(3, words.size());
+        //TODO: need more precise test
         words.forEach((word,count)->{
             assertTrue(count>0);
         });
+    }
+
+    @Test
+    public void iteratorTest(){
+        Iterator<Review> iterator = sparkService.iterator();
+        AtomicInteger atomicInteger = new AtomicInteger(0);
+        iterator.forEachRemaining(r->atomicInteger.incrementAndGet());
+
+        assertEquals(9, atomicInteger.get());
     }
 }

@@ -1,5 +1,8 @@
 package demo;
 
+import demo.model.Review;
+import demo.parser.CSVParser;
+import demo.parser.Parser;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

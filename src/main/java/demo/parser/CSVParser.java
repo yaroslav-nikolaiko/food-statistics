@@ -1,4 +1,6 @@
-package demo;
+package demo.parser;
+
+import demo.model.Review;
 
 import java.util.HashMap;
 import java.util.Map;
