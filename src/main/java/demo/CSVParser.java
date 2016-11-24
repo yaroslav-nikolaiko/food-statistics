@@ -2,7 +2,6 @@ package demo;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 import static java.util.stream.IntStream.range;
 
@@ -36,7 +35,11 @@ public class CSVParser implements Parser {
         Integer index = fieldsMap.get("Text");
         StringBuilder text = new StringBuilder(fields[index]);
         if(fields.length > index +1)
-            range(index +1 , fields.length).forEach(i->text.append(",").append(fields[i]));
+            range(index +1 , fields.length)
+                    .forEach(i->
+                            text.append(",")
+                            .append(fields[i])
+                    );
         return text.toString().replaceAll("^\"|\"$", "");
     }
 }

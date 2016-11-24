@@ -5,8 +5,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CSVParserTest {
-
-
     @Test
     public void csvParserTest(){
         Parser parser = new CSVParser();
