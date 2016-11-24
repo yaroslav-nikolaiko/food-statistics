@@ -45,4 +45,14 @@ public class SparkServiceTest {
         assertTrue(items.containsKey("B000UA0QIQ"));
         assertEquals(Integer.valueOf(2), items.get("B000UA0QIQ"));
     }
+
+    @Test
+    public void mostUsedWordsInReviewTest(){
+        Map<String, Integer> words = sparkService.mostUsedWordsInReview(3);
+
+        assertEquals(3, words.size());
+        words.forEach((word,count)->{
+            assertTrue(count>0);
+        });
+    }
 }

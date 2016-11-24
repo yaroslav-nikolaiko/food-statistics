@@ -7,16 +7,15 @@ import scala.Tuple2;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toMap;
 
 public class SparkService implements Serializable{
     private final String APP_NAME = "Amazon Food Statistic";
-    JavaRDD<Review> reviews;
+    private JavaRDD<Review> reviews;
 
     private Parser parser;
 
@@ -54,6 +53,22 @@ public class SparkService implements Serializable{
                         LinkedHashMap::new));
     }
 
+    public Map<String, Integer> mostUsedWordsInReview(int number) {
+        return reviews
+                .flatMap(r -> asList(r.text.split("\\s+")).iterator())
+                .map(String::toLowerCase)
+                .mapToPair(word -> new Tuple2<>(word, 1))
+                .reduceByKey((v1, v2) -> v1 + v2)
+                .mapToPair(t -> new Tuple2<>(t._2, t._1))
+                .sortByKey(false)
+                .take(number)
+                .stream()
+                .collect(toMap(Tuple2::_2, Tuple2::_1,(u, v) -> {
+                            throw new IllegalStateException(String.format("Duplicate key %s", u));
+                        },
+                        LinkedHashMap::new));
+    }
+
 
 
     public void setParser(Parser parser) {
@@ -63,7 +78,4 @@ public class SparkService implements Serializable{
     Integer numberOfCores(){
         return Runtime.getRuntime().availableProcessors();
     }
-
-
-
 }
