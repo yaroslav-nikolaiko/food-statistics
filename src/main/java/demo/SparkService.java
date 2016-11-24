@@ -17,7 +17,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toMap;
 
 public class SparkService implements Serializable{
-    private final String APP_NAME = "Amazon Food Statistic";
+    private final String APP_NAME = "Amazon Food Statistics";
     private JavaRDD<Review> reviews;
 
     private Parser parser;
@@ -84,8 +84,6 @@ public class SparkService implements Serializable{
                         },
                         LinkedHashMap::new));
     }
-
-
 
     public void setParser(Parser parser) {
         this.parser = parser;

@@ -4,7 +4,7 @@ import demo.model.Review;
 
 public class Batch {
     int maxCharacters;
-    StringBuilder text;
+    StringBuilder text = new StringBuilder();
 
     public Batch(int maxCharacters) {
         this.maxCharacters = maxCharacters;

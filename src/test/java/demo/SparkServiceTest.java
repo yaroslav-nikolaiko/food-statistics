@@ -2,6 +2,7 @@ package demo;
 
 import demo.model.Review;
 import demo.parser.CSVParser;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -10,20 +11,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static demo.SparkServiceManager.getSparkService;
 import static org.apache.avro.TypeEnum.c;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class SparkServiceTest {
-    static SparkService sparkService;
-
-    @BeforeClass
-    public static void init(){
-        sparkService = new SparkService();
-        sparkService.setParser(new CSVParser());
-        URL sample = SparkServiceTest.class.getResource("/sample.csv");
-        sparkService.load(sample);
-    }
+    SparkService sparkService = getSparkService();
 
     @Test
     public void mostActiveUsersTest(){
