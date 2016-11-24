@@ -28,4 +28,15 @@ public class CSVParserTest {
 
         assertEquals(expected, review);
     }
+
+    @Test
+    public void csvParserCommaInTextTest(){
+        Parser parser = new CSVParser();
+        String line = "4,B000UA0QIQ,A395BORC6FGVXV,Karl,3,3,2,1307923200,Cough Medicine,\"If you are, looking for the secret\"";
+        Review expected = new Review("Karl", "B000UA0QIQ", "If you are, looking for the secret");
+
+        Review review = parser.parse(line);
+
+        assertEquals(expected, review);
+    }
 }

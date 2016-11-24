@@ -2,6 +2,9 @@ package demo;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
+
+import static java.util.stream.IntStream.range;
 
 public class CSVParser implements Parser {
     private static final String PROFILE_NAME = "ProfileName";
@@ -21,12 +24,19 @@ public class CSVParser implements Parser {
         String[] fields = line.split(",");
         Review review  = new Review();
 
-        String text = fields[fieldsMap.get("Text")];
-        text = text.replaceAll("^\"|\"$", "");
+        String text = extractText(fields);
 
         review.setProfileName(fields[fieldsMap.get("ProfileName")]);
         review.setItemID( fields[fieldsMap.get("ProductId")]);
         review.setText(text);
         return review;
+    }
+
+    String extractText(String[] fields){
+        Integer index = fieldsMap.get("Text");
+        StringBuilder text = new StringBuilder(fields[index]);
+        if(fields.length > index +1)
+            range(index +1 , fields.length).forEach(i->text.append(",").append(fields[i]));
+        return text.toString().replaceAll("^\"|\"$", "");
     }
 }
