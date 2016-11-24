@@ -21,9 +21,12 @@ public class CSVParser implements Parser {
         String[] fields = line.split(",");
         Review review  = new Review();
 
+        String text = fields[fieldsMap.get("Text")];
+        text = text.replaceAll("^\"|\"$", "");
+
         review.setProfileName(fields[fieldsMap.get("ProfileName")]);
         review.setItemID( fields[fieldsMap.get("ProductId")]);
-        review.setText(fields[fieldsMap.get("Text")]);
+        review.setText(text);
         return review;
     }
 }
