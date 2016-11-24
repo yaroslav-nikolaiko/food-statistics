@@ -1,4 +1,4 @@
-package demo;
+package demo.parser;
 
 import demo.model.Review;
 import demo.parser.CSVParser;
