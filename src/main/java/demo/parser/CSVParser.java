@@ -1,13 +1,16 @@
 package demo.parser;
 
 import demo.model.Review;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.stream.IntStream.range;
 
+@Component
 public class CSVParser implements Parser {
+    private static final String ID = "Id";
     private static final String PROFILE_NAME = "ProfileName";
     private static final String PRODUCT_ID = "ProductId";
     private static final String TEXT = "Text";
@@ -15,6 +18,7 @@ public class CSVParser implements Parser {
     Map<String, Integer> fieldsMap = new HashMap<>();
 
     public CSVParser() {
+        fieldsMap.put(ID, 0);
         fieldsMap.put(PROFILE_NAME, 3);
         fieldsMap.put(PRODUCT_ID, 1);
         fieldsMap.put(TEXT, 9);
@@ -27,8 +31,12 @@ public class CSVParser implements Parser {
 
         String text = extractText(fields);
 
-        review.setProfileName(fields[fieldsMap.get("ProfileName")]);
-        review.setItemID( fields[fieldsMap.get("ProductId")]);
+        //TODO: WTF??
+        review.setProfileName(fields[fieldsMap.get(PROFILE_NAME)]);
+        review.setItemID( fields[fieldsMap.get(PRODUCT_ID)]);
+        if( ! fields[0].equals("Id")){
+            review.setId(Long.valueOf(fields[fieldsMap.get(ID)]) );
+        }
         review.setText(text);
         return review;
     }

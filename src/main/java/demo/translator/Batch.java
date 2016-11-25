@@ -20,4 +20,8 @@ public class Batch {
             text.append(review.getText()).append("\n");
         return notFull;
     }
+
+    public String get(){
+        return text.toString();
+    }
 }

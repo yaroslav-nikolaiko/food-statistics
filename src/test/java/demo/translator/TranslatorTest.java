@@ -15,50 +15,44 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.concurrent.ListenableFuture;
 
+import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static demo.SparkServiceManager.getSparkService;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = FoodReviewsApplication.class)
 public class TranslatorTest {
+    @Autowired
     GoogleTranslateMock translateMock;
 
     SparkService sparkService = getSparkService();
 
     @Autowired
-    Translator translator;
+    TranslatorService translator;
 
-    public TranslatorTest(){
-        this.translateMock = new GoogleTranslateMock();
-        this.translateMock.setResponseTime(0);
-    }
 
     //TODO: This is only "smoke" test. Need to add much more
     @Test
-    public void textShouldBeTranslatedTest(){
+    public void textShouldBeTranslatedTest() throws IOException {
         Set<String> expected = expectedTranslation();
         Iterator<Review> reviewIterator = translator.translate(sparkService.iterator());
-        AtomicInteger atomicInteger = new AtomicInteger();
+
+
         reviewIterator.forEachRemaining(r->{
-            if(atomicInteger.getAndIncrement()%10000 == 0)
-                System.out.println(r.getText());
+            assertTrue(expected.contains(r.getText()));
         });
-/*       assertEquals(9, translated.size());
-        translated.forEach(
-                r->assertTrue(expected.contains(r.getText()))
-        );*/
     }
 
     @Autowired
-    TranslatorClient translatorClient;
+    GoogleTranslateClient googleTranslateClient;
 
     @Test
     @Ignore
     public void test() throws Exception {
         System.out.println("Before Request ");
-        ListenableFuture<ResponseEntity<TranslatorResponse>> translate = translatorClient.translate(new TranslatorPayload("en", "ru", "dsfsdfsdf sdfsdf"));
+        ListenableFuture<ResponseEntity<TranslatorResponse>> translate = googleTranslateClient.translate(new TranslatorPayload("en", "ru", "dsfsdfsdf sdfsdf"));
         /*while(true){
             System.out.println(translate.hasResult());
             try {
@@ -70,7 +64,6 @@ public class TranslatorTest {
         System.out.println("After Request ");
         System.out.println(translate.get().getBody().getText());
         System.out.println("After REsponse ");
-        //System.out.println(translate);
     }
 
     Set<String> expectedTranslation(){

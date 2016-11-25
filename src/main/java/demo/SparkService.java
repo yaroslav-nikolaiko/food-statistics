@@ -4,6 +4,8 @@ import demo.model.Review;
 import demo.parser.Parser;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import scala.Tuple2;
 
 import java.io.Serializable;
@@ -16,10 +18,12 @@ import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toMap;
 
+@Service
 public class SparkService implements Serializable{
     private final String APP_NAME = "Amazon Food Statistics";
     private JavaRDD<Review> reviews;
 
+    @Autowired
     private Parser parser;
 
     public void load(URL fileURL) {
