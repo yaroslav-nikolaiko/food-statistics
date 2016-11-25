@@ -14,13 +14,7 @@ public class SparkServiceManager {
         if(manager.sparkService == null){
             manager.sparkService = new SparkService();
             manager.sparkService.setParser(new CSVParser());
-            URL sample = SparkServiceTest.class.getResource("/sample.csv");
-/*            URL sample = null;
-            try {
-                sample = new URL("file:///home/yaroslav/Documents/Reviews.csv");
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }*/
+            String sample = SparkServiceTest.class.getResource("/sample.csv").getFile();
             manager.sparkService.load(sample);
         }
         return manager.sparkService;

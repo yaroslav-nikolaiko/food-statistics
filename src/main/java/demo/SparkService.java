@@ -26,9 +26,9 @@ public class SparkService implements Serializable{
     @Autowired
     private Parser parser;
 
-    public void load(URL fileURL) {
+    public void load(String filePath) {
         JavaSparkContext sc = new JavaSparkContext(format("local[%s]", numberOfCores()), APP_NAME);
-        JavaRDD<String> csvRDD = sc.textFile(fileURL.getPath());
+        JavaRDD<String> csvRDD = sc.textFile(filePath);
         this.reviews = csvRDD.map(line->parser.parse(line));
         this.reviews = dropHeader(reviews);
     }

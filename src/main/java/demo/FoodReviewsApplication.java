@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -39,12 +40,14 @@ public class FoodReviewsApplication implements ApplicationRunner{
         if(args.getSourceArgs().length == 0)
             return;
 
-        URL sample = null;
+/*        URL sample = null;
         try {
-            sample = new URL(args.getOptionValues("input").get(0));
+            //String input = args.getOptionValues("input").get(0);
+            //sample = Paths.get(input).toUri().toURL();
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
+        }*/
+        String sample = args.getOptionValues("input").get(0);
         sparkService.load(sample);
 
         mostActiveUsers();
