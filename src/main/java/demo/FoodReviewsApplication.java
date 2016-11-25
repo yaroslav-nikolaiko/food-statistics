@@ -20,6 +20,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @SpringBootApplication
 @Component
@@ -40,32 +41,35 @@ public class FoodReviewsApplication implements ApplicationRunner{
 
         URL sample = null;
         try {
-            sample = new URL("file:///home/yaroslav/Documents/Reviews.csv");
+            sample = new URL(args.getOptionValues("input").get(0));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         sparkService.load(sample);
 
-        //mostActiveUsers();
-        //mostCommentedFoodItems();
-        //mostUsedWordsInReview();
+        mostActiveUsers();
+        mostCommentedFoodItems();
+        mostUsedWordsInReview();
 
-        String filePath = "/tmp/result.csv";
-        Files.deleteIfExists(new File(filePath).toPath());
+        if(args.getOptionValues("translateOutput")!=null && args.getOptionValues("translateOutput").size()>0){
+            String filePath = args.getOptionValues("translateOutput").get(0);
+            Files.deleteIfExists(new File(filePath).toPath());
 
-        FileWriter fileWritter = new FileWriter(filePath,true);
-        BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+            FileWriter fileWritter = new FileWriter(filePath,true);
+            BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
 
 
-        Iterator<Review> reviewIterator = translator.translate(sparkService.iterator());
+            Iterator<Review> reviewIterator = translator.translate(sparkService.iterator());
 
-        reviewIterator.forEachRemaining(r->{
-            //if(atomicInteger.getAndIncrement()%10000 == 0)
-            //System.out.println(r.getText());
-            appendToFile(r.toCsv(), bufferWritter);
-        });
+            AtomicInteger counter = new AtomicInteger();
+            reviewIterator.forEachRemaining(r->{
+                if(counter.getAndIncrement()%5000 == 0)
+                    System.out.println("Translated Id "+r.getId());
+                appendToFile(r.toCsv(), bufferWritter);
+            });
 
-        bufferWritter.close();
+            bufferWritter.close();
+        }
         System.exit(0);
     }
 
