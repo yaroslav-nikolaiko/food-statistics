@@ -3,6 +3,8 @@ package demo.translator;
 import demo.model.Review;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -12,8 +14,8 @@ public class TranslatorIterator implements Iterator<Review>{
     BlockingQueue<Review> buffer;
     AtomicBoolean isDone = new AtomicBoolean(false);
 
-    public TranslatorIterator(BlockingQueue<Review> buffer){
-        this.buffer = buffer;
+    public TranslatorIterator(int batchNumber){
+        this.buffer = new ArrayBlockingQueue<>(batchNumber*2);
     }
 
     public void setDone(boolean isDone){
@@ -35,5 +37,15 @@ public class TranslatorIterator implements Iterator<Review>{
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void add(List<Review> reviews){
+        reviews.forEach(r -> {
+            try {
+                buffer.put(r);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

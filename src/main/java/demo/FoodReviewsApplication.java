@@ -66,9 +66,11 @@ public class FoodReviewsApplication implements ApplicationRunner{
 
             AtomicInteger counter = new AtomicInteger();
             reviewIterator.forEachRemaining(r->{
-                if(counter.getAndIncrement()%5000 == 0)
-                    System.out.println("Translated Id "+r.getId());
-                appendToFile(r.toCsv(), bufferWritter);
+                if(r!=null){
+                    if(counter.getAndIncrement()%5000 == 0)
+                        System.out.println("Translated Id "+r.getId());
+                    appendToFile(r.toCsv(), bufferWritter);
+                }
             });
 
             bufferWritter.close();

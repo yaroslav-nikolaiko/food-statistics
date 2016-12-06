@@ -8,7 +8,8 @@ import static org.junit.Assert.*;
 public class BatchTest {
     @Test
     public void testBatchCapacity(){
-        Batch batch = new Batch(5);
+        Batch.maxCharacters = 5;
+        Batch batch = new Batch();
         Review review = new Review(1L,null, null, "123");
         batch.add(new Review(1L,null, null, "1"));
         assertTrue(batch.canTake(review));
@@ -18,12 +19,13 @@ public class BatchTest {
 
     @Test
     public void testBatchContent(){
-        Batch batch = new Batch(10);
+        Batch.maxCharacters = 10;
+        Batch batch = new Batch();
         Review review1 = new Review(1L,null, null, "123");
         Review review2 = new Review(1L, null, null, "qwe");
         batch.add(review1);
         batch.add(review2);
 
-        assertEquals("123\nqwe\n", batch.text.toString());
+        assertEquals("123\nqwe", batch.payload.toString());
     }
 }
